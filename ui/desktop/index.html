@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteDrop v1.0.0</title>
+    <link rel="stylesheet" href="/static/desktop/desktop.css?v={{ASSET_VERSION}}">
+</head>
+<body{{INITIAL_BODY_CLASS}}>
+    <div class="bg-orb orb-1" aria-hidden="true"></div>
+    <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="brand">
+                <h1>ByteDrop</h1>
+                <p id="brand-sub" data-i18n="brand_sub">Local &amp; Cloud File Transfer • v1.0.0</p>
+            </div>
+            <button id="open-settings-btn" class="icon-btn" title="Open Settings" aria-label="Open Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="qr-section">
+            <div class="qr-wrapper">
+                <img id="qr-img" src="{{QR_DATA_URI}}" alt="QR Code">
+            </div>
+            <div class="qr-toggle-group">
+                <button id="qr-btn-local" class="qr-toggle-btn active" data-i18n="qr_local">Local</button>
+                <button id="qr-btn-cloud" class="qr-toggle-btn" disabled data-i18n="qr_cloud">Cloud</button>
+                <button id="qr-btn-hotspot" class="qr-toggle-btn" disabled data-i18n="qr_hotspot">Hotspot</button>
+            </div>
+        </div>
+
+        <div class="connection-info">
+            <div class="link-group">
+                <span class="link-label" id="lbl-local-link" data-i18n="local_link_lbl">Local Wi-Fi Link</span>
+                <div class="url-row">
+                    <div id="url-box" class="url-box" data-dynamic="true">{{URL}}</div>
+                    <button id="copy-local-btn" class="btn-secondary" data-dynamic="true">Copy</button>
+                </div>
+            </div>
+            <div class="link-group">
+                <div class="link-label-row">
+                    <span class="link-label" id="lbl-cloud-link" data-i18n="cloud_link_lbl">Public Cloud Link</span>
+                    <span id="cloud-state-pill" class="cloud-state-pill" data-dynamic="true">Starting</span>
+                </div>
+                <div class="url-row">
+                    <div id="public-url-box" class="url-box" data-dynamic="true">Starting cloud tunnel...</div>
+                    <button id="copy-public-btn" class="btn-secondary" data-dynamic="true">Copy</button>
+                </div>
+                <span id="cloud-link-warning" class="hotspot-meta" data-i18n="cloud_link_warning">Anyone with this link can send you file requests. Use Regenerate Session to revoke it.</span>
+            </div>
+            <div class="hotspot-card">
+                <span id="hotspot-label" class="hotspot-meta" data-dynamic="true">Turn on Mobile hotspot in Windows, then scan the Hotspot QR.</span>
+                <button id="open-hotspot-settings-btn" type="button" class="btn-secondary" data-i18n="open_hotspot_settings">Open Windows Hotspot settings</button>
+            </div>
+            <div id="status-badge" class="status-badge" data-dynamic="true" aria-live="polite">0 Devices Connected</div>
+            <div id="devices-list" class="devices-mini-list"></div>
+            <div id="blocked-section" class="blocked-section">
+                <span class="link-label" data-i18n="blocked_devices_title">Blocked Devices</span>
+                <div id="blocked-list" class="devices-mini-list"></div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-panel">
+        <div id="drop-card" class="share-card">
+            <div class="share-info">
+                <h2 id="drop-title" data-i18n="drop_title">Drag &amp; Drop Files or Folders Here</h2>
+                <p id="drop-sub" data-i18n="drop_sub">Instant Metadata Prompt • Chunk Streaming • Auto-Zips Folders</p>
+            </div>
+            <div class="share-actions">
+                <button id="browse-btn" class="btn-primary" data-i18n="browse_files_btn">Browse PC Files</button>
+                <button id="browse-folder-btn" class="btn-folder" data-i18n="browse_folders_btn">Browse Folders</button>
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="section-header">
+                <span data-i18n="active_transfers_title">Active Transfers</span>
+                <div class="speed-indicator-group">
+                    <span id="speed-indicator" class="speed-pill idle" data-dynamic="true" aria-live="polite"><bdi dir="ltr">Idle</bdi></span>
+                    <span id="active-count-sub" class="active-count-sub" data-dynamic="true" style="display:none;"></span>
+                    <button id="cancel-all-btn" type="button" class="btn-danger hidden" data-i18n="cancel_all_btn" style="display:none; padding:3px 9px; font-size:0.72rem;">Cancel all</button>
+                </div>
+            </div>
+            <div id="cloud-slow-banner" class="cloud-slow-banner hidden" style="display:none;">
+                <span id="cloud-slow-text" data-i18n="cloud_large_file_hint">Large file over the internet link — for faster speed, connect both devices to the same Wi-Fi or a PC hotspot.</span>
+                <button id="dismiss-cloud-hint-btn" type="button" class="cloud-hint-close" title="Dismiss" aria-label="Dismiss">&times;</button>
+            </div>
+            <div id="active-transfers-box" class="active-transfers-box" aria-live="polite"></div>
+        </div>
+
+        <div class="sync-card">
+            <div class="section-header">
+                <span id="lbl-clip-sync" data-i18n="clipboard_title">Clipboard Sync</span>
+                <span style="display:flex; gap:6px;">
+                    <button id="clip-toggle-btn" class="btn-secondary" title="Opt-in automatic clipboard sync" data-dynamic="true">Auto: Off</button>
+                    <button id="copy-btn" class="btn-secondary" data-dynamic="true">Copy &amp; Send</button>
+                </span>
+            </div>
+            <textarea id="sync-textarea" class="sync-textarea" data-i18n-placeholder="clip_placeholder" placeholder="Plain text syncs between PC and connected phones..."></textarea>
+        </div>
+
+        <div class="split-lists">
+            <div class="list-column">
+                <div class="section-header">
+                    <span id="lbl-live-feed" data-i18n="history_title">Transfer History &amp; Live Feed</span>
+                    <span style="display:flex; gap:6px;">
+                        <button id="clear-history-btn" class="btn-secondary" data-i18n="clear_history_btn">Clear History</button>
+                        <button id="downloads-btn" class="btn-secondary" data-i18n="open_downloads_btn">Open Downloads</button>
+                    </span>
+                </div>
+                <div id="activity-list" class="activity-list"></div>
+            </div>
+
+            <div class="list-column" style="max-width: 265px;">
+                <div class="section-header">
+                    <span id="lbl-shared-pc" data-i18n="shared_pc_title">Shared From PC</span>
+                </div>
+                <div id="shared-pc-list" class="activity-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Incoming Transfer Permission Modal (Section 3.1: No "total" text) -->
+    <div id="perm-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="perm-modal-title">
+        <div class="modal-box">
+            <h3 id="perm-modal-title" data-i18n="incoming_title">Incoming Mobile Transfer</h3>
+            <p id="perm-desc" data-dynamic="true"></p>
+            <div id="perm-file-list" class="prompt-file-list" style="display:none;"></div>
+            <div>
+                <button id="perm-expand-btn" type="button" class="btn-secondary" data-dynamic="true" style="display:none;"></button>
+            </div>
+            <div id="perm-disk-warn" class="disk-warning-box" data-dynamic="true"></div>
+            <div id="perm-thumbs" class="preview-row"></div>
+            <div class="modal-actions">
+                <button id="reject-btn" class="btn-danger" data-i18n="reject_btn">Reject</button>
+                <button id="accept-btn" class="btn-primary" data-dynamic="true">Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear History Confirmation Modal -->
+    <div id="confirm-clear-modal" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal-box" style="width:360px;">
+            <h3 data-i18n="clear_history_modal_title">Clear Transfer History</h3>
+            <p data-i18n="clear_history_modal_desc">Are you sure you want to permanently clear the transfer history log?</p>
+            <div class="modal-actions">
+                <button id="cancel-clear-btn" class="btn-secondary" data-i18n="cancel_btn">Cancel</button>
+                <button id="confirm-clear-btn" class="btn-danger" data-i18n="clear_all_btn">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel All Confirmation Modal (G3) -->
+    <div id="confirm-cancel-all-modal" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal-box" style="width:360px;">
+            <h3 data-i18n="cancel_all_btn">Cancel all</h3>
+            <p data-i18n="cancel_all_confirm">Cancel all active and waiting transfers?</p>
+            <div class="modal-actions">
+                <button id="dismiss-cancel-all-btn" type="button" class="btn-secondary" data-i18n="cancel_btn">Cancel</button>
+                <button id="confirm-cancel-all-btn" type="button" class="btn-danger" data-i18n="cancel_all_btn">Cancel all</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="lbl-settings-title">
+        <div class="modal-box">
+            <div class="settings-header">
+                <h3 id="lbl-settings-title" data-i18n="settings_title">ByteDrop Settings</h3>
+                <button id="close-settings-btn" class="btn-secondary" data-i18n="done_btn">Done</button>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_theme_title">Appearance Theme &amp; Language</span>
+                    <span class="settings-row-sub" data-i18n="settings_theme_sub">Saved to %APPDATA%\ByteDrop\config.json</span>
+                </div>
+                <div style="display:flex; gap:6px; align-items:center;">
+                    <div class="theme-pill-group">
+                        <button id="theme-dark-btn" class="theme-pill-btn active" data-i18n="theme_dark">Dark</button>
+                        <button id="theme-light-btn" class="theme-pill-btn" data-i18n="theme_light">Light</button>
+                    </div>
+                    <div class="theme-pill-group">
+                        <button id="lang-en-btn" class="theme-pill-btn active">EN</button>
+                        <button id="lang-ar-btn" class="theme-pill-btn">العربية</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_accent_title">Accent Color</span>
+                    <span class="settings-row-sub" data-i18n="settings_accent_sub">Customize UI glass accent palette</span>
+                </div>
+                <div class="swatch-group" id="accent-swatch-group">
+                    <button class="color-swatch active" data-accent="blue" style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);" title="Blue"></button>
+                    <button class="color-swatch" data-accent="purple" style="background: linear-gradient(135deg, #6d28d9, #8b5cf6);" title="Purple"></button>
+                    <button class="color-swatch" data-accent="green" style="background: linear-gradient(135deg, #047857, #10b981);" title="Emerald"></button>
+                    <button class="color-swatch" data-accent="cyan" style="background: linear-gradient(135deg, #0e7490, #06b6d4);" title="Cyan"></button>
+                    <button class="color-swatch" data-accent="rose" style="background: linear-gradient(135deg, #be123c, #f43f5e);" title="Rose"></button>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_dir_title">Download Save Directory</span>
+                    <span class="settings-row-sub" id="settings-dir-label" data-dynamic="true">~/Downloads/ByteDrop</span>
+                </div>
+                <button id="change-dir-btn" class="btn-secondary" data-i18n="change_folder_btn">Change Folder</button>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_ip_title">Preferred LAN Network Adapter</span>
+                    <span class="settings-row-sub" data-i18n="settings_ip_sub">Select IPv4 address used for local QR code</span>
+                </div>
+                <select id="preferred-ip-select" class="settings-select">
+                    <option value="" data-i18n="auto_detect_opt">Auto-Detect</option>
+                </select>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_cloud_title">Cloud Link Auto-Start</span>
+                    <span class="settings-row-sub" data-i18n="settings_cloud_sub">Start public cloud tunnel automatically on launch</span>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button id="cloud-auto-toggle" class="toggle-switch active" data-dynamic="true">On</button>
+                    <button id="cloud-restart-btn" class="btn-secondary" data-i18n="restart_btn">Restart</button>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_auto_accept_title">Auto-Accept Local Transfers</span>
+                    <span class="settings-row-sub" data-i18n="settings_auto_accept_sub">Skip prompt for trusted local Wi-Fi devices</span>
+                </div>
+                <button id="auto-accept-toggle" class="toggle-switch" data-dynamic="true">Off</button>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_max_folder_title">Max Folder Share Size (GB)</span>
+                    <span class="settings-row-sub" data-i18n="settings_max_folder_sub">Safety cap when zipping shared folders</span>
+                </div>
+                <input id="max-folder-gb-input" type="number" min="1" max="100" value="20" class="settings-input" style="width:64px;">
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_tray_title">System Tray &amp; Startup</span>
+                    <span class="settings-row-sub" data-i18n="settings_tray_sub">Tray close behavior, start minimized, Windows login</span>
+                </div>
+                <div style="display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end;">
+                    <button id="tray-mode-toggle" class="toggle-switch" data-dynamic="true" title="Minimize to Tray on Close">Tray: Off</button>
+                    <button id="start-min-toggle" class="toggle-switch" data-dynamic="true" title="Open Minimized to Tray">Min: Off</button>
+                    <button id="autostart-toggle" class="toggle-switch" data-dynamic="true" title="Start with Windows">Win: Off</button>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_notif_title">OS Toast Notifications &amp; Session</span>
+                    <span class="settings-row-sub" data-i18n="settings_notif_sub">Desktop alerts &amp; instant session token rotation</span>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button id="mute-notif-toggle" class="toggle-switch active" data-dynamic="true">Alerts: On</button>
+                    <button id="regen-session-btn" class="btn-danger" data-i18n="regen_session_btn" title="Invalidate current token &amp; disconnect devices">Regenerate Session</button>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <span class="settings-row-title" data-i18n="settings_diag_title">Diagnostics &amp; Logs</span>
+                    <span class="settings-row-sub" data-i18n="settings_diag_sub">Inspect logs or copy support summary (tokens redacted)</span>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button id="open-logs-btn" type="button" class="btn-secondary" data-i18n="open_logs_btn">Open Log Folder</button>
+                    <button id="copy-diag-btn" type="button" class="btn-secondary" data-dynamic="true">Copy Diagnostics</button>
+                </div>
+            </div>
+
+            <div class="settings-footer">
+                <span>ByteDrop v1.0.0</span>
+                <span style="font-style:italic;">By Hussein</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/shared/format.js?v={{ASSET_VERSION}}"></script>
+    <script src="/static/desktop/i18n.js?v={{ASSET_VERSION}}"></script>
+    <script src="/static/desktop/desktop.js?v={{ASSET_VERSION}}"></script>
+</body>
+</html>

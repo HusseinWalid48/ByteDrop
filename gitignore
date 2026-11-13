@@ -1,0 +1,43 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+
+# --- ByteDrop runtime data (never ship user data) ---
+# %APPDATA%\ByteDrop contents if ever copied into the repo by mistake
+config.json
+history.json
+bytedrop.log
+running.pid
+*.lock
+
+# --- PyInstaller / build artifacts ---
+*.spec.bak
+*.manifest
+installer_output/
+*.download
+
+# --- Large binaries: ship via GitHub Releases, not git history ---
+ByteDrop.exe
+ByteDrop-Setup-*.exe
+*.zip
+
+# --- OS / editor junk ---
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# --- Env / secrets (if ever added) ---
+.env
+.env.*

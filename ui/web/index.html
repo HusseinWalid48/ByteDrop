@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0b1120">
+    <link rel="icon" type="image/svg+xml" href="/static/icons/icon.svg">
+    <title>ByteDrop</title>
+    <link rel="stylesheet" href="/static/app.css?v={{ASSET_VERSION}}">
+</head>
+<body{{INITIAL_BODY_CLASS}}>
+    <div class="bg-orb orb-1" aria-hidden="true"></div>
+    <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+    <main class="glass-container">
+        <header class="app-header">
+            <div class="logo-group">
+                <div class="logo-icon" aria-hidden="true"></div>
+                <h1 data-i18n="app_title">ByteDrop</h1>
+            </div>
+            <div class="badges" aria-live="polite">
+                <span id="status-badge" class="badge connecting" data-dynamic="true" aria-live="polite">Connecting...</span>
+            </div>
+        </header>
+
+        <div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
+        <div id="toast-banner" class="toast-banner" style="display:none;" role="status" aria-live="polite" data-dynamic="true"></div>
+
+        <!-- Section 3.3: Disconnected / Blocked by PC Banner with Reconnect button -->
+        <div id="kicked-banner" class="kicked-banner" role="alert">
+            <span id="kicked-banner-text" data-dynamic="true">Disconnected by the PC</span>
+            <button id="reconnect-btn" type="button" class="action-btn" data-i18n="reconnect_btn">Reconnect</button>
+        </div>
+
+        <!-- Section 5.4: Single Select Files button + folder hint -->
+        <section class="upload-zone" id="drop-zone" role="button" tabindex="0" aria-label="Select or drop files to upload">
+            <input type="file" id="file-input" multiple hidden>
+            <div class="upload-prompt">
+                <svg class="upload-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <h2 data-i18n="upload_title">Tap or Drop Files to Send</h2>
+                <p id="chunk-info-label" data-i18n="upload_sub">Chunked Streaming • Smart Resume</p>
+                <div class="upload-btn-row">
+                    <button id="select-files-btn" type="button" class="action-btn" data-i18n="select_files_btn">Select Files</button>
+                </div>
+                <p class="subtle-note" data-i18n="folder_hint">To send a folder, zip it first or send it from the PC.</p>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="clipboard_title">Live Clipboard</h3>
+                <button id="copy-text-btn" type="button" class="action-btn" data-dynamic="true">Copy</button>
+            </div>
+            <textarea id="sync-input" class="glass-textarea" data-i18n-placeholder="clipboard_placeholder" placeholder="Plain text syncs with PC clipboard..."></textarea>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="active_transfers_title">Active Transfers</h3>
+                <div class="speed-pill-wrap">
+                    <span id="speed-indicator" class="speed-pill idle" data-dynamic="true" aria-live="polite"><bdi dir="auto">Idle</bdi></span>
+                    <span id="active-count-sub" class="active-count-sub" data-dynamic="true" style="display:none;"></span>
+                    <button id="cancel-all-btn" type="button" class="ctrl-btn danger" data-i18n="cancel_all_btn" style="display:none;">Cancel all</button>
+                </div>
+            </div>
+            <div id="cloud-slow-banner" class="cloud-slow-banner" style="display:none;">
+                <span id="cloud-slow-text" data-i18n="cloud_slow_hint">Using the Cloud link (slower). Use the Wi-Fi link for faster transfers.</span>
+                <button id="dismiss-cloud-hint-btn" type="button" class="cloud-hint-close" title="Dismiss" aria-label="Dismiss">&times;</button>
+            </div>
+            <div id="transfers-list" class="list-container" aria-live="polite">
+                <div class="empty-placeholder" data-i18n="transfers_idle">No active transfers</div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h3 class="panel-title" data-i18n="shared_pc_title">Shared From PC</h3>
+            </div>
+            <div id="shared-list" class="list-container">
+                <div class="empty-placeholder" data-i18n="no_shared_files">No files shared yet</div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h3 class="panel-title" data-i18n="history_title">Transfer History</h3>
+            <div id="history-list" class="list-container">
+                <div class="empty-placeholder" data-i18n="no_history">No transfer history</div>
+            </div>
+        </section>
+        <footer class="app-footer"><span>ByteDrop v{{VERSION}}</span><span>By Hussein</span></footer>
+    </main>
+
+    <!-- Incoming PC Share Modal (Section 3.1: No "total" text) -->
+    <div id="perm-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="perm-title">
+        <div class="modal-glass">
+            <h3 id="perm-title" data-i18n="incoming_pc_title">Incoming PC Share</h3>
+            <p id="perm-text" data-dynamic="true">PC wants to share files with you.</p>
+            <div id="perm-file-list" class="prompt-file-list" style="display:none;"></div>
+            <div>
+                <button id="perm-expand-btn" type="button" class="ctrl-btn" style="display:none;" data-dynamic="true">+more</button>
+            </div>
+            <div id="perm-previews" class="preview-strip"></div>
+            <div class="modal-buttons">
+                <button id="reject-modal-btn" type="button" class="modal-btn reject" data-i18n="reject_btn">Reject</button>
+                <button id="accept-modal-btn" type="button" class="modal-btn accept" data-i18n="accept_btn">Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel All Confirmation Modal (G3) -->
+    <div id="confirm-cancel-all-modal" class="modal-backdrop" role="dialog" aria-modal="true">
+        <div class="modal-glass">
+            <h3 data-i18n="cancel_all_btn">Cancel all</h3>
+            <p data-i18n="cancel_all_confirm">Cancel all active and waiting transfers?</p>
+            <div class="modal-buttons">
+                <button id="dismiss-cancel-all-btn" type="button" class="modal-btn reject" data-i18n="cancel_btn">Cancel</button>
+                <button id="confirm-cancel-all-btn" type="button" class="modal-btn accept" style="background: rgba(185, 28, 28, 0.78);" data-i18n="cancel_all_btn">Cancel all</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inline HTTP 206 Media Stream Player Modal -->
+    <div id="stream-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="stream-title">
+        <div class="modal-glass stream-modal-glass">
+            <div class="settings-header-row">
+                <h3 id="stream-title" data-dynamic="true">Media Stream</h3>
+                <button id="close-stream-btn" type="button" class="action-btn" data-i18n="close_btn">Close</button>
+            </div>
+            <div id="stream-player-container" class="stream-player-box"></div>
+        </div>
+    </div>
+
+    <script src="/static/shared/format.js?v={{ASSET_VERSION}}"></script>
+    <script src="/static/i18n.js?v={{ASSET_VERSION}}"></script>
+    <script src="/static/app.js?v={{ASSET_VERSION}}"></script>
+</body>
+</html>
