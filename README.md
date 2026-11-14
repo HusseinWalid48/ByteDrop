@@ -16,6 +16,11 @@ No accounts. No cables. No cloud storage in between.
 
 </div>
 
+<p align="center">
+  <img src="assets/screenshot-dark.png" width="49%" alt="ByteDrop — dark mode">
+  <img src="assets/screenshot-light.png" width="49%" alt="ByteDrop — light mode">
+</p>
+
 ---
 
 ## Why ByteDrop?
@@ -34,13 +39,14 @@ Sending a file to your phone — or another computer — shouldn't require signi
 - **Live clipboard sync** — push/pull text between PC and any connected browser
 - **Device management** — see every connected device, block or kick any of them instantly
 - **Minimal footprint** — all config, history, logs, and lock files live inside `%APPDATA%\ByteDrop`; nothing touches the registry except the optional auto-start entry
+- **Light & dark themes** with selectable accent colors
 
 ## How it works
 
 ```mermaid
 graph LR
-    A[Remote browser<br/>phone, tablet, or PC] <--QR / authenticated URL--> B(ByteDrop on PC)
-    B <--LAN / Hotspot / Cloudflare tunnel--> A
+    A["Remote browser<br/>phone · tablet · PC"] -- "scan QR / open link" --> B["ByteDrop<br/>on your PC"]
+    B -- "LAN · Hotspot · Cloudflare tunnel" --> A
 ```
 
 Each session is protected by a 128-bit random token embedded in the URL fragment (`#token=...`), so it's never sent in a request or written to a log. Repeated failed attempts from an IP are rate-limited and locked out for 5 minutes.
