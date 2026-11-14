@@ -23,25 +23,25 @@ No accounts. No cables. No cloud storage in between.
 
 ---
 
-## Why ByteDrop?
+## 🤔 Why ByteDrop?
 
 Sending a file to your phone — or another computer — shouldn't require signing into three different apps. ByteDrop opens a private, authenticated connection between your PC and any browser on another device: phone, tablet, or a second PC — over your local Wi-Fi, a Windows Mobile Hotspot, or a public link when you're not on the same network — and gets out of your way.
 
-## Features
+## ✨ Features
 
-- **Three connection modes**
+- 📡 **Three connection modes**
   - **Local Wi-Fi (LAN)** — instant QR code and authenticated URL on your home network (`TCP 8000–8049`)
   - **Windows Mobile Hotspot** — auto-detects the `192.168.137.1` hotspot adapter with its own QR code
   - **Cloud Link** — one-click global HTTPS tunnel via Cloudflare Quick Tunnels (`trycloudflare.com`), no account needed
-- **Bidirectional transfers with resume**
+- 🔄 **Bidirectional transfers with resume**
   - **Remote device → PC**: multi-file chunked uploads with HTTP Range resume, automatic categorization (Images, Videos, Docs, Audio, Archives, Others), optional auto-accept on trusted networks. Works the same from a phone, tablet, or another PC's browser.
   - **PC → Remote device**: drag-and-drop or file/folder picker; folders stream as a background `.zip` with live progress
-- **Live clipboard sync** — push/pull text between PC and any connected browser
-- **Device management** — see every connected device, block or kick any of them instantly
-- **Minimal footprint** — all config, history, logs, and lock files live inside `%APPDATA%\ByteDrop`; nothing touches the registry except the optional auto-start entry
-- **Light & dark themes** with selectable accent colors
+- 📋 **Live clipboard sync** — push/pull text between PC and any connected browser
+- 📱 **Device management** — see every connected device, block or kick any of them instantly
+- 🪶 **Minimal footprint** — all config, history, logs, and lock files live inside `%APPDATA%\ByteDrop`; nothing touches the registry except the optional auto-start entry
+- 🎨 **Light & dark themes** with selectable accent colors
 
-## How it works
+## ⚙️ How it works
 
 ```mermaid
 graph LR
@@ -52,7 +52,7 @@ graph LR
 
 Each session is protected by a 128-bit random token embedded in the URL fragment (`#token=...`), so it's never sent in a request or written to a log. Repeated failed attempts from an IP are rate-limited and locked out for 5 minutes.
 
-## Installation
+## 📦 Installation
 
 ### Option 1 — Windows Installer (recommended)
 
@@ -74,7 +74,7 @@ Start.bat
 - Python 3.10+
 - [Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/) (usually preinstalled on Windows 10/11)
 
-## Requirements
+## 🖥️ Requirements
 
 | | |
 |---|---|
@@ -82,7 +82,7 @@ Start.bat
 | **Mobile Hotspot mode** | Requires Windows 10/11 — it's a Windows feature, not a ByteDrop limitation |
 | **LAN & Cloud Link modes** | Only need Python 3.10+ and WebView2; likely work on older Windows but are untested — issues/PRs welcome |
 
-## Building the installer
+## 🔨 Building the installer
 
 Requires Windows, Python 3.10–3.12, and [Inno Setup](https://jrsoftware.org/isinfo.php) 6.3+. See [`BUILD.md`](BUILD.md) for full details.
 
@@ -94,7 +94,7 @@ pyinstaller bytedrop.spec --noconfirm --clean
 ISCC.exe installer.iss
 ```
 
-## Security notes
+## 🔒 Security notes
 
 - Session tokens are 128-bit, generated with `secrets.token_urlsafe`, and compared in constant time.
 - The bundled `cloudflared` binary is SHA-256 verified against a pinned hash before every execution.
@@ -102,11 +102,11 @@ ISCC.exe installer.iss
 
 Found a security issue? Please don't open a public issue — report it privately via GitHub's "Report a vulnerability" button under this repo's **Security** tab.
 
-## Contributing
+## 🤝 Contributing
 
 Issues and PRs are welcome. For anything non-trivial, please open an issue first to discuss the change.
 
-## License
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
 
