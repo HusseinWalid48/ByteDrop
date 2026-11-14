@@ -4,7 +4,7 @@
 
 # ByteDrop
 
-**Fast, zero-configuration file & clipboard transfer between your PC and phone.**
+**Fast, zero-configuration file & clipboard transfer between your PC and any browser — phone, tablet, or another PC.**
 
 No accounts. No cables. No cloud storage in between.
 
@@ -20,7 +20,7 @@ No accounts. No cables. No cloud storage in between.
 
 ## Why ByteDrop?
 
-Sending a file to your own phone shouldn't require signing into three different apps. ByteDrop opens a private, authenticated connection between your PC and your phone's browser — over your local Wi-Fi, a Windows Mobile Hotspot, or a public link when you're not on the same network — and gets out of your way.
+Sending a file to your phone — or another computer — shouldn't require signing into three different apps. ByteDrop opens a private, authenticated connection between your PC and any browser on another device: phone, tablet, or a second PC — over your local Wi-Fi, a Windows Mobile Hotspot, or a public link when you're not on the same network — and gets out of your way.
 
 ## Features
 
@@ -29,8 +29,8 @@ Sending a file to your own phone shouldn't require signing into three different 
   - **Windows Mobile Hotspot** — auto-detects the `192.168.137.1` hotspot adapter with its own QR code
   - **Cloud Link** — one-click global HTTPS tunnel via Cloudflare Quick Tunnels (`trycloudflare.com`), no account needed
 - **Bidirectional transfers with resume**
-  - **Phone → PC**: multi-file chunked uploads with HTTP Range resume, automatic categorization (Images, Videos, Docs, Audio, Archives, Others), optional auto-accept on trusted networks
-  - **PC → Phone**: drag-and-drop or file/folder picker; folders stream as a background `.zip` with live progress
+  - **Remote device → PC**: multi-file chunked uploads with HTTP Range resume, automatic categorization (Images, Videos, Docs, Audio, Archives, Others), optional auto-accept on trusted networks. Works the same from a phone, tablet, or another PC's browser.
+  - **PC → Remote device**: drag-and-drop or file/folder picker; folders stream as a background `.zip` with live progress
 - **Live clipboard sync** — push/pull text between PC and any connected browser
 - **Device management** — see every connected device, block or kick any of them instantly
 - **Minimal footprint** — all config, history, logs, and lock files live inside `%APPDATA%\ByteDrop`; nothing touches the registry except the optional auto-start entry
@@ -39,7 +39,7 @@ Sending a file to your own phone shouldn't require signing into three different 
 
 ```mermaid
 graph LR
-    A[Phone browser] <--QR / authenticated URL--> B(ByteDrop on PC)
+    A[Remote browser<br/>phone, tablet, or PC] <--QR / authenticated URL--> B(ByteDrop on PC)
     B <--LAN / Hotspot / Cloudflare tunnel--> A
 ```
 
