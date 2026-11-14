@@ -45,8 +45,9 @@ Sending a file to your phone — or another computer — shouldn't require signi
 
 ```mermaid
 graph LR
-    A["Remote browser<br/>phone · tablet · PC"] -- "scan QR / open link" --> B["ByteDrop<br/>on your PC"]
-    B -- "LAN · Hotspot · Cloudflare tunnel" --> A
+    A["ByteDrop<br/>on your PC"] -- "1. shows QR / link" --> B["Remote browser<br/>phone · tablet · PC"]
+    B -- "2. connects over<br/>LAN · Hotspot · tunnel" --> C["Secure session"]
+    C -- "3. files & clipboard<br/>sync both ways" --> A
 ```
 
 Each session is protected by a 128-bit random token embedded in the URL fragment (`#token=...`), so it's never sent in a request or written to a log. Repeated failed attempts from an IP are rate-limited and locked out for 5 minutes.
