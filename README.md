@@ -58,7 +58,7 @@ Each session is protected by a 128-bit random token embedded in the URL fragment
 
 1. Download `ByteDrop.exe` from the [latest release](../../releases/latest).
 2. Run it directly — **no installer, no admin rights required.**
-3. On first run, you'll be prompted once to allow ByteDrop through the Windows Firewall for LAN access (this step *does* ask for admin, since it edits firewall rules — you can skip it and still use Cloud Link).
+3. Cloud Link works immediately with no extra setup. For LAN or Mobile Hotspot mode, Windows may prompt you to allow ByteDrop through the firewall the first time it tries to accept a connection — allow it on **Private** networks only.
 
 ### Option 2 — Run from source
 
