@@ -100,7 +100,7 @@ ISCC.exe installer.iss
 - The bundled `cloudflared` binary is SHA-256 verified against a pinned hash before every execution.
 - Cloud Link traffic is distinguished from LAN traffic via Cloudflare's `cf-connecting-ip` header, checked only when the request itself originates from loopback (i.e. actually came through the tunnel) — so it can't be spoofed by a LAN client.
 
-Found a security issue? Please open a private report rather than a public issue — see [SECURITY.md](SECURITY.md) *(add one if you'd like a disclosure policy)*.
+Found a security issue? Please don't open a public issue — report it privately via GitHub's "Report a vulnerability" button under this repo's **Security** tab.
 
 ## Contributing
 
@@ -108,7 +108,7 @@ Issues and PRs are welcome. For anything non-trivial, please open an issue first
 
 ## License
 
-[MIT](LICENSE) — or your license of choice once added.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
