@@ -54,11 +54,11 @@ Each session is protected by a 128-bit random token embedded in the URL fragment
 
 ## 📦 Installation
 
-### Option 1 — Windows Installer (recommended)
+### Option 1 — Portable executable (recommended)
 
-1. Download `ByteDrop-Setup-1.0.0.exe` from the [latest release](../../releases/latest).
-2. Run it — installs per-user, **no administrator rights required**.
-3. Optional during setup: desktop shortcut, launch at login, and a Windows Firewall rule for LAN access (this one *does* ask for admin, since it edits firewall rules).
+1. Download `ByteDrop.exe` from the [latest release](../../releases/latest).
+2. Run it directly — **no installer, no admin rights required.**
+3. On first run, you'll be prompted once to allow ByteDrop through the Windows Firewall for LAN access (this step *does* ask for admin, since it edits firewall rules — you can skip it and still use Cloud Link).
 
 ### Option 2 — Run from source
 
@@ -81,18 +81,6 @@ Start.bat
 | **Fully tested on** | Windows 10 / 11 |
 | **Mobile Hotspot mode** | Requires Windows 10/11 — it's a Windows feature, not a ByteDrop limitation |
 | **LAN & Cloud Link modes** | Only need Python 3.10+ and WebView2; likely work on older Windows but are untested — issues/PRs welcome |
-
-## 🔨 Building the installer
-
-Requires Windows, Python 3.10–3.12, and [Inno Setup](https://jrsoftware.org/isinfo.php) 6.3+. See [`BUILD.md`](BUILD.md) for full details.
-
-```powershell
-python -m venv .venv
-.venv\Scripts\activate
-python -m pip install --prefer-binary -r requirements.lock.txt pyinstaller
-pyinstaller bytedrop.spec --noconfirm --clean
-ISCC.exe installer.iss
-```
 
 ## 🔒 Security notes
 
